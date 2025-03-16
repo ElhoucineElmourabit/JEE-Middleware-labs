@@ -2,7 +2,10 @@ package ma.enset.metier;
 
 
 import ma.enset.dao.IDao;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+@Service("metier")
 public class MetierImpl implements IMetier{
 
     private IDao dao;
@@ -10,7 +13,7 @@ public class MetierImpl implements IMetier{
     public MetierImpl() {
     }
 
-    public MetierImpl(IDao dao) {
+    public MetierImpl(@Qualifier("dao") IDao dao) {
         this.dao = dao;
     }
 
