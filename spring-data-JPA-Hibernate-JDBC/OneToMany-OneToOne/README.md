@@ -1,0 +1,2 @@
+# Diagramme de classes
+![Diagramme de classes](https://github.com/ElhoucineElmourabit/JEE-Middleware-labs/blob/main/spring-data-JPA-Hibernate-JDBC/OneToMany-OneToOne/images/Diagramme%20de%20classes.png)
