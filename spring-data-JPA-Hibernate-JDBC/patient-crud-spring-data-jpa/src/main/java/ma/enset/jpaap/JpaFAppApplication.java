@@ -26,7 +26,7 @@ public class JpaFAppApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         for (int i=0; i<100;i++){
             patientRepository.save(
-                    new Patient(null, "Hassan", new Date(), false, (int)Math.random()*100));
+                    new Patient(null, "Hassan", new Date(), Math.random()>0.5?true:false, (int)(Math.random()*100) ));
         }
 
         Page<Patient> patients = patientRepository.findAll(PageRequest.of(1,5));
@@ -35,7 +35,12 @@ public class JpaFAppApplication implements CommandLineRunner {
         System.out.println("Num Page : " + patients.getNumber());
         List <Patient> content = patients.getContent();
 
-        content.forEach(p->{
+
+        Page<Patient> byMalade = patientRepository.findByMalade(true,
+                PageRequest.of(1,5));
+
+        List<Patient> patientList = patientRepository.chercherPatients("H",40);
+        patientList.forEach(p->{
             System.out.println("=====================");
             System.out.println(p.toString());
         });
