@@ -1,9 +1,7 @@
 package ma.enset.hospital.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +11,7 @@ import java.util.Date;
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor
 public class Consultation {
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Date dateConsultation;
     private String rapport;
