@@ -3,9 +3,13 @@ package com.example.backend;
 import com.example.backend.entities.*;
 import com.example.backend.entities.enums.AccountStatus;
 import com.example.backend.entities.enums.OperationType;
+import com.example.backend.exceptions.BalanceNotSufficientException;
+import com.example.backend.exceptions.BankAccountNotFoundException;
+import com.example.backend.exceptions.CustomerNotFoundException;
 import com.example.backend.repositories.AccountOperationRepository;
 import com.example.backend.repositories.BankAccountRepository;
 import com.example.backend.repositories.CustomerRepository;
+import com.example.backend.services.BankAccountService;
 import jakarta.transaction.Transactional;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +17,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -75,33 +80,31 @@ public class BackendApplication {
     }
 
     @Bean
-    CommandLineRunner commandLineRunner(BankAccountRepository bankAccountRepository) {
+    CommandLineRunner commandLineRunner(BankAccountService bankAccountService) {
         return args -> {
-            BankAccount bankAccount = bankAccountRepository.findById("098f3bf7-5bc6-45dd-8786-ee7dc593f9e0").orElse(null);
-            if (bankAccount != null) {
-                System.out.println("********************");
-                System.out.println(bankAccount.getId());
-                System.out.println(bankAccount.getBalance());
-                System.out.println(bankAccount.getStatus());
-                System.out.println(bankAccount.getCreatedAt());
-                System.out.println(bankAccount.getCustomer().getName());
-                System.out.println(bankAccount.getClass().getSimpleName());
-                if (bankAccount instanceof CurrentAccount) {
-                    System.out.println("Over draft => " + ((CurrentAccount) bankAccount).getOverDraft());
-                } else {
-                    System.out.println("Interest rate => " + ((SavingAccount) bankAccount).getInterestRate());
-                }
-
-                bankAccount.getOperations()
-                        .forEach(op -> {
-                            System.out.println("-----------------------------");
-                            System.out.println(op.getId());
-                            System.out.println(op.getType());
-                            System.out.println(op.getAmount());
-                            System.out.println(op.getOperationDate());
-                        });
-            }
-            }
-            ;
-        }
+            Stream.of("Hassan", "Yassine", "Piastri")
+                    .forEach( name->{
+                        Customer customer = new Customer();
+                        customer.setName(name);
+                        customer.setEmail(name+"@gmail.com");
+                        bankAccountService.saveCustomer(customer);
+                    });
+            bankAccountService.listCustomers()
+                    .forEach( customer -> {
+                        try {
+                            bankAccountService.saveCurrentBankAccount(Math.random()*90000, 9000, customer.getId());
+                            bankAccountService.saveSavingBankAccount(Math.random()*120000, 5.5, customer.getId());
+                            List<BankAccount> bankAccounts = bankAccountService.bankAccountList();
+                            for(BankAccount bankAccount: bankAccounts){
+                                for (int i = 0; i < 10; i++) {
+                                    bankAccountService.credit(bankAccount.getId(), 1000 + Math.random()*12000, "CREDIT");
+                                    bankAccountService.debit(bankAccount.getId(), 1000 + Math.random()*9000,"DEBIT" );
+                                }
+                            }
+                        } catch (CustomerNotFoundException | BankAccountNotFoundException | BalanceNotSufficientException e) {
+                            e.printStackTrace();
+                        }
+                    });
+        };
+    }
 }
