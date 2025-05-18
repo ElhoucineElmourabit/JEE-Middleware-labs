@@ -1,0 +1,36 @@
+<div class="container mt-2">
+  <ng-container *ngIf="customers$ | async as customers; else failureOrLoading">
+    <div class="card">
+      <div class="card-header">Customers</div>
+      <div class="card-body">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>NAME</th>
+              <th>EMAIL</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for(c of customers; track c.id){
+            <tr>
+              <td>{{ c.id }}</td>
+              <td>{{ c.name }}</td>
+              <td>{{ c.email }}</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #failureOrLoading class="text-danger">
+    @if(errorMessage){
+    <div class="text-danger">
+      {{ errorMessage }}
+    </div>
+    }@else {
+    <div>Chargement des customers...</div>
+    }
+  </ng-template>
+</div>
