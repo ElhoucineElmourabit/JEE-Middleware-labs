@@ -4,6 +4,7 @@ import { CustomerService } from '../../shared/services/customer.service';
 import { Customer } from '../../shared/models/customer';
 import { catchError, map, Observable, of, throwError } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -15,7 +16,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 })
 export class CustomersComponent implements OnInit {
 
-  constructor(private customerService: CustomerService){
+  constructor(private customerService: CustomerService, private router: Router){
   }
 
   customers$: Observable<Customer[]> | undefined;
@@ -60,5 +61,10 @@ export class CustomersComponent implements OnInit {
       }
     }
     );
+  }
+
+  handleAccounts(customer: Customer){
+    console.log('click');
+    this.router.navigateByUrl(`/customer-accounts/${customer.id}`)
   }
 }

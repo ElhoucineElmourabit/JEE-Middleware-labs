@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import {CustomersComponent} from './components/customers/customers.component';
 import {AccountsComponent} from './components/accounts/accounts.component';
 import { NewCustomerComponent } from './components/new-customer/new-customer.component';
+import { CustomerAccountComponent } from './components/customer-account/customer-account.component';
 
 export const routes: Routes = [
   { path: "customers",
@@ -15,5 +16,9 @@ export const routes: Routes = [
   { path: "new-customer",
     title: "New Customer",
     component: NewCustomerComponent
+  },
+  { path: "customer-accounts/:id",
+    title: "Customer Account",
+    component: CustomerAccountComponent
   },
 ];
