@@ -4,6 +4,7 @@ import com.example.backend.dtos.BankAccountDTO;
 import com.example.backend.exceptions.BankAccountNotFoundException;
 import com.example.backend.services.BankAccountService;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class BankAccountRestAPI {
     private BankAccountService bankAccountService;
 

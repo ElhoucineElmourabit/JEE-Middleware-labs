@@ -65,6 +65,14 @@ public class BankAccountServiceImpl implements BankAccountService{
     }
 
     @Override
+    public List<CustomerDTO> searchCustomers(String keyword) {
+        return customerRepository.findByNameContains(keyword)
+                .stream()
+                .map(mapper::fromCustomer)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public CurrentAccountDTO saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId) throws CustomerNotFoundException {
         Customer customer = customerRepository.findById(customerId).orElse(null);
         if (customer == null){
@@ -198,4 +206,6 @@ public class BankAccountServiceImpl implements BankAccountService{
         AccountHistoryDTO accountHistoryDTO = mapper.fromAccountHistory(accountOperations, id, bankAccount.getBalance(), page, size);
         return accountHistoryDTO;
     }
+
+
 }
