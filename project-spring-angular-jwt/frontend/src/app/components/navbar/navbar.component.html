@@ -33,30 +33,37 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
             <li>
-              <a class="dropdown-item" routerLink="/customers"
+              <a class="dropdown-item" routerLink="/admin/customers"
                 >Search customers</a
               >
             </li>
+            @if(authService.roles.includes("ADMIN")){
             <li>
-              <a class="dropdown-item" routerLink="/new-customer"
+              <a class="dropdown-item" routerLink="/admin/new-customer"
                 >New customer</a
               >
             </li>
+            }
           </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" routerLink="/accounts">Accounts</a>
+          <a class="nav-link active" routerLink="/admin/accounts">Accounts</a>
         </li>
       </ul>
-      <form class="d-flex">
-        <input
-          class="form-control me-2"
-          type="search"
-          placeholder="Search"
-          aria-label="Search"
-        />
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+      <ul class="navbar">
+        @if(authService.isAuthenticated){
+        <li>
+          <a class="nav-link active">{{ this.authService.username }}</a>
+        </li>
+        } @else {
+        <li>
+          <a class="nav-link active">[username]</a>
+        </li>
+        }
+        <li>
+          <button (click)="handLogout()" class="btn btn-success">Logout</button>
+        </li>
+      </ul>
     </div>
   </div>
 </nav>
